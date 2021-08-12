@@ -1,5 +1,6 @@
 package com.enigmacamp.mysimpleretorfit.presentation
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.enigmacamp.mysimpleretorfit.data.remote.response.PostResponse
 import com.enigmacamp.mysimpleretorfit.repository.PostRepository
@@ -18,6 +19,22 @@ class MainViewModel(private val repo: PostRepository) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _postLiveData.postValue(Resource.loading())
             val response = repo.getPosts()
+            if (response != null) {
+                val responseStatus = response.status
+                val responseMessage = response.message
+                val responseData = response.data
+                _postLiveData.postValue(Resource.success(data = responseData))
+            } else {
+                _postLiveData.postValue(Resource.error(message = "Oops...something went wrong"))
+            }
+
+        }
+    }
+
+    fun getPostById(id: Int = 1) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _postLiveData.postValue(Resource.loading())
+            val response = repo.getPostById(id)
             if (response != null) {
                 val responseStatus = response.status
                 val responseMessage = response.message
