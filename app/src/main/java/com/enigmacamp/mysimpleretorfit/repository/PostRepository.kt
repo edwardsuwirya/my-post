@@ -37,15 +37,14 @@ class PostRepository(
 
     suspend fun getPostById(id: Int): BaseResponse<PostResponse>? {
         return try {
-            withTimeout(5000) {
+            withTimeout(10000) {
                 val response = postApi.getPostById(id)
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
                         val listResponse = responseBody.data
                         val postResponse = listResponse[0]
-                        val imageResponseBody = unsplashApi.getImage(postResponse.fileUrl)
-                        SaveToStorage.save(context, imageResponseBody.body())
+
                         responseBody
                     } else {
                         null

@@ -1,24 +1,20 @@
 package com.enigmacamp.mysimpleretorfit
 
 import android.app.Application
-import android.app.NotificationChannel
-import android.app.NotificationManager
+import android.content.IntentFilter
+import com.enigmacamp.mysimpleretorfit.data.remote.broadcastReceiver.DownloadBroadcastReceiver
 
 class BaseApplication : Application() {
+    private val downloadBroadcastReceiver by lazy { DownloadBroadcastReceiver() }
     override fun onCreate() {
         super.onCreate()
-        createNotificationChannel()
+        val intentFilter = IntentFilter("com.enigmacamp.mysimpleservice.DOWNLOAD_BROADCAST")
+        registerReceiver(downloadBroadcastReceiver, intentFilter)
     }
 
-    private fun createNotificationChannel() {
-        val downloadNotificationChannel = NotificationChannel(
-            CHANNEL_ID,
-            "Download Notification",
-            NotificationManager.IMPORTANCE_DEFAULT
-        )
-        downloadNotificationChannel.description = "Download"
-        val manager = getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(downloadNotificationChannel)
+    override fun onTerminate() {
+        super.onTerminate()
+        unregisterReceiver(downloadBroadcastReceiver)
     }
 
     companion object {
