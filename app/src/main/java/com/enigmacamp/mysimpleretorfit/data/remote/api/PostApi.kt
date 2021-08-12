@@ -4,10 +4,7 @@ import com.enigmacamp.mysimpleretorfit.data.remote.request.PostRequest
 import com.enigmacamp.mysimpleretorfit.data.remote.response.BaseResponse
 import com.enigmacamp.mysimpleretorfit.data.remote.response.PostResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface PostApi {
     @GET("posts")
